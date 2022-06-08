@@ -2,7 +2,7 @@
   "name": "order",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "start": "node api/index.js",
     "start:dev": "nodemon api/index.js"

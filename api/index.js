@@ -2,15 +2,12 @@ const dotenv = require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
-const { uuid } = require('uuidv4');
-const connectDB = require("../config/db");
+const connectDB = require("./db");
+const OrdersModel = require("./mongoose");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-const port = process.env.PORT || 5000;
-let OrdersModel = require("./mongoose");
 
 app.get('/api/:id', async (req, res) => {
   try {
@@ -99,7 +96,7 @@ app.patch('/api/:id', async (req, res) => {
   }
 });
 
-app.listen(port, async () => {
-  console.log("The server is running on " + port)
+app.listen(process.env.PORT || 5000, async () => {
+  console.log("The server is running")
   await connectDB();
 });
