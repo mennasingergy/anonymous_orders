@@ -1,11 +1,10 @@
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
-const connectDB = require("./db");
-const OrdersModel = require("./mongoose");
+const { mongoClient } = require('./mongo');
 
 const app = express();
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -59,7 +58,7 @@ app.delete('/api/:id', async (req, res) => {
 
 app.patch('/api/:id', async (req, res) => {
   try {
-    Shipment.updateOne(
+    OrdersModel.updateOne(
       { Shipment_status: "ReadyToShip" },
       { $set: { Order_status: "Shipped" } },
       { upsert: true }
@@ -68,7 +67,7 @@ app.patch('/api/:id', async (req, res) => {
     res.status(200).json("Error");
   }
   try {
-    Shipment.updateOne(
+    OrdersModel.updateOne(
       { Shipment_status: "Shipped" },
       { $set: { Order_status: "Delivered" } },
       { upsert: true }
@@ -77,7 +76,7 @@ app.patch('/api/:id', async (req, res) => {
     print(e);
   }
   try {
-    Shipment.updateOne(
+    OrdersModel.updateOne(
       { Shipment_status: "Canceled" },
       { $set: { Order_status: "Returned" } },
       { upsert: true }
@@ -86,7 +85,7 @@ app.patch('/api/:id', async (req, res) => {
     print(e);
   }
   try {
-    Shipment.updateOne(
+    OrdersModel.updateOne(
       { Order_Id: req.body.Order_Id },
       { $set: { Order_status: "Created" } },
       { upsert: true }
@@ -98,5 +97,5 @@ app.patch('/api/:id', async (req, res) => {
 
 app.listen(process.env.PORT || 5000, async () => {
   console.log("The server is running")
-  await connectDB();
+  //await connectDB();
 });
